@@ -28,6 +28,16 @@ const doc = {
         identifier: "mojsovski",
         password: "12345",
       },
+      RegisterRequest: {
+        fullName: "Mulyono",
+        userName: "mulyono10",
+        email: "mulyono10@yopmail.com",
+        password: "plongaplongo11",
+        confirmPassword: "plongaplongo11",
+      },
+      ActivationRequest: {
+        code: "abcdef",
+      },
     },
   },
 };
