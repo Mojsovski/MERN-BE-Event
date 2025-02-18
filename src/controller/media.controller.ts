@@ -6,7 +6,8 @@ import response from "../utils/response";
 export default {
   async single(req: IReqUser, res: Response) {
     if (!req.file) {
-      return response.error(res, null, "File is not found");
+      response.error(res, null, "File is not found");
+      return;
     }
 
     try {
@@ -22,7 +23,8 @@ export default {
 
   async multiple(req: IReqUser, res: Response) {
     if (!req.files || req.files.length === 0) {
-      return response.error(res, null, "Files is not exist");
+      response.error(res, null, "Files is not exist");
+      return;
     }
 
     try {

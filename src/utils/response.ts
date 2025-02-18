@@ -14,6 +14,7 @@ export default {
         status: 200,
         message,
       },
+      data,
     });
   },
   error(res: Response, error: unknown, message: string) {
