@@ -7,6 +7,7 @@ import mediaMiddleware from "../middleware/media.middleware";
 import mediaController from "../controller/media.controller";
 import categoryController from "../controller/category.controller";
 import regionController from "../controller/region.controller";
+import eventController from "../controller/event.controller";
 
 const router = express.Router();
 
@@ -82,5 +83,30 @@ router.get("/region/:id/district", regionController.getDistrict);
 router.get("/region/:id/village", regionController.getVillage);
 
 router.get("/region-search", regionController.findByCity);
+
+//event
+router.post(
+  "/event",
+  [authMiddleware, aclMiddleware([ROLES.ADMIN])],
+  eventController.create
+);
+
+router.get("/event", eventController.findAll);
+
+router.get("/event/:id", eventController.findOne);
+
+router.put(
+  "/event/:id",
+  [authMiddleware, aclMiddleware([ROLES.ADMIN])],
+  eventController.update
+);
+
+router.delete(
+  "/event/:id",
+  [authMiddleware, aclMiddleware([ROLES.ADMIN])],
+  eventController.remove
+);
+
+router.get("/event/:slug/slug", eventController.findOnebySlug);
 
 export default router;
