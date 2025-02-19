@@ -25,8 +25,8 @@ const doc = {
     },
     schemas: {
       loginRequest: {
-        identifier: "mojsovski",
-        password: "12345",
+        identifier: "ambadianto30",
+        password: "Wongliyoretiopo12",
       },
       RegisterRequest: {
         fullName: "Mulyono",
@@ -37,6 +37,29 @@ const doc = {
       },
       ActivationRequest: {
         code: "abcdef",
+      },
+      RemoveMediaRequest: {
+        fileUrl: "",
+      },
+      CreateCategoryRequest: {
+        name: "",
+        description: "",
+        icon: "",
+      },
+      CreateEventRequest: {
+        name: "Acara 3",
+        banner:
+          "https://res.cloudinary.com/mojsovski/image/upload/v1739766299/n9bbhau6mynrywdqho4v.jpg",
+        category: "67b3ee3bebdd3480ec24a857",
+        description: "Acara 3 event test",
+        startDate: "2025-02-02 12:00:54",
+        endDate: "2025-02-02 14:40:54",
+        location: {
+          region: "3404070003",
+          coordinates: [6.6, 10.1],
+        },
+        isOnline: false,
+        isFeatured: true,
       },
     },
   },
