@@ -52,8 +52,12 @@ const registerValidateSchema = Yup.object({
 export default {
   async register(req: Request, res: Response) {
     /**
- #swagger.tag = ['Auth']
- */
+     #swagger.tags = ['Auth']
+     #swagger.requestBody = {
+      required: true,
+      schema: {$ref: "#/components/schemas/RegisterRequest"}
+     }
+    */
 
     const { userName, fullName, email, password, confirmPassword } =
       req.body as unknown as TRegister;

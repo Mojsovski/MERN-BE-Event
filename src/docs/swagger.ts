@@ -57,9 +57,11 @@ const doc = {
         location: {
           region: "3404070003",
           coordinates: [6.6, 10.1],
+          address: "",
         },
         isOnline: false,
         isFeatured: true,
+        isPublish: false,
       },
     },
   },
