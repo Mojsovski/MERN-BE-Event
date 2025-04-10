@@ -46,6 +46,9 @@
     },
     "/auth/login": {
       "post": {
+        "tags": [
+          "Auth"
+        ],
         "description": "",
         "responses": {
           "default": {
@@ -71,6 +74,9 @@
     },
     "/auth/me": {
       "get": {
+        "tags": [
+          "Auth"
+        ],
         "description": "",
         "responses": {
           "default": {
@@ -86,6 +92,9 @@
     },
     "/auth/activation": {
       "post": {
+        "tags": [
+          "Auth"
+        ],
         "description": "",
         "responses": {
           "default": {
@@ -676,6 +685,343 @@
           }
         }
       }
+    },
+    "/tickets": {
+      "post": {
+        "tags": [
+          "Tickets"
+        ],
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": {}
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTicketRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTicketRequest"
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Tickets"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/tickets/{id}": {
+      "get": {
+        "tags": [
+          "Tickets"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Tickets"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": {}
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTicketRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTicketRequest"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Tickets"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": {}
+          }
+        ]
+      }
+    },
+    "/tickets/{eventId}/events": {
+      "get": {
+        "tags": [
+          "Tickets"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/banners": {
+      "post": {
+        "tags": [
+          "Banners"
+        ],
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": {}
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBannerRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBannerRequest"
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Banners"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/banners/{id}": {
+      "get": {
+        "tags": [
+          "Banners"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Banners"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": {}
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBannerRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBannerRequest"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Banners"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": {}
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -691,11 +1037,11 @@
         "properties": {
           "identifier": {
             "type": "string",
-            "example": "ambadianto30"
+            "example": "email or username"
           },
           "password": {
             "type": "string",
-            "example": "Wongliyoretiopo12"
+            "example": "password"
           }
         },
         "xml": {
@@ -707,23 +1053,23 @@
         "properties": {
           "fullName": {
             "type": "string",
-            "example": "Mulyono"
+            "example": "fullname"
           },
           "userName": {
             "type": "string",
-            "example": "mulyono10"
+            "example": "username"
           },
           "email": {
             "type": "string",
-            "example": "mulyono10@yopmail.com"
+            "example": "email"
           },
           "password": {
             "type": "string",
-            "example": "plongaplongo11"
+            "example": "password"
           },
           "confirmPassword": {
             "type": "string",
-            "example": "plongaplongo11"
+            "example": "confirm password"
           }
         },
         "xml": {
@@ -735,7 +1081,7 @@
         "properties": {
           "code": {
             "type": "string",
-            "example": "abcdef"
+            "example": "from email"
           }
         },
         "xml": {
@@ -759,15 +1105,15 @@
         "properties": {
           "name": {
             "type": "string",
-            "example": ""
+            "example": "category name"
           },
           "description": {
             "type": "string",
-            "example": ""
+            "example": "category description"
           },
           "icon": {
             "type": "string",
-            "example": ""
+            "example": "category icon "
           }
         },
         "xml": {
@@ -779,40 +1125,40 @@
         "properties": {
           "name": {
             "type": "string",
-            "example": "Acara 3"
+            "example": "event name"
           },
           "banner": {
             "type": "string",
-            "example": "https://res.cloudinary.com/mojsovski/image/upload/v1739766299/n9bbhau6mynrywdqho4v.jpg"
+            "example": "image url "
           },
           "category": {
             "type": "string",
-            "example": "67b3ee3bebdd3480ec24a857"
+            "example": "category id"
           },
           "description": {
             "type": "string",
-            "example": "Acara 3 event test"
+            "example": "event description"
           },
           "startDate": {
             "type": "string",
-            "example": "2025-02-02 12:00:54"
+            "example": "yyyy-mm-dd hh-mm-ss"
           },
           "endDate": {
             "type": "string",
-            "example": "2025-02-02 14:40:54"
+            "example": "yyyy-mm-dd hh-mm-ss"
           },
           "location": {
             "type": "object",
             "properties": {
               "region": {
                 "type": "string",
-                "example": "3404070003"
+                "example": "3404070003  id from village"
               },
               "coordinates": {
                 "type": "array",
                 "example": [
-                  6.6,
-                  10.1
+                  0,
+                  0
                 ],
                 "items": {
                   "type": "number"
@@ -820,7 +1166,7 @@
               },
               "address": {
                 "type": "string",
-                "example": ""
+                "example": "address"
               }
             }
           },
@@ -839,6 +1185,54 @@
         },
         "xml": {
           "name": "CreateEventRequest"
+        }
+      },
+      "CreateBannerRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "banner title"
+          },
+          "image": {
+            "type": "string",
+            "example": "banner image url"
+          },
+          "isShow": {
+            "type": "boolean",
+            "example": true
+          }
+        },
+        "xml": {
+          "name": "CreateBannerRequest"
+        }
+      },
+      "CreateTicketRequest": {
+        "type": "object",
+        "properties": {
+          "price": {
+            "type": "string",
+            "example": "price"
+          },
+          "name": {
+            "type": "string",
+            "example": "ticket name"
+          },
+          "events": {
+            "type": "string",
+            "example": "objectid"
+          },
+          "description": {
+            "type": "string",
+            "example": "ticket description"
+          },
+          "quantity": {
+            "type": "string",
+            "example": "ticket quantity"
+          }
+        },
+        "xml": {
+          "name": "CreateTicketRequest"
         }
       }
     }

@@ -51,14 +51,6 @@ const registerValidateSchema = Yup.object({
 
 export default {
   async register(req: Request, res: Response) {
-    /**
-     #swagger.tags = ['Auth']
-     #swagger.requestBody = {
-      required: true,
-      schema: {$ref: "#/components/schemas/RegisterRequest"}
-     }
-    */
-
     const { userName, fullName, email, password, confirmPassword } =
       req.body as unknown as TRegister;
 
@@ -85,13 +77,6 @@ export default {
   },
 
   async login(req: Request, res: Response) {
-    /**
-     #swagger.tag = ['Auth']
-     #swagger.requestBody = {
-     required: true,
-     schema: {$ref: "#/components/schemas/loginRequest"}}
-     */
-
     const { identifier, password } = req.body as unknown as TLogin;
     try {
       //ambil data user berdasarkan "identifier" => email dan username
@@ -131,13 +116,6 @@ export default {
   },
 
   async me(req: IReqUser, res: Response) {
-    /**
-    #swagger.tag = ['Auth']
-    #swagger.security = [{
-    "bearerAuth": []
-    }]
- */
-
     try {
       const user = req.user;
       const result = await UserModel.findById(user?.id);
@@ -149,12 +127,6 @@ export default {
   },
 
   async activation(req: Request, res: Response) {
-    /**
-     #swagger.tag = ['Auth']
-     #swagger.requestBody = {
-     required: true,
-     schema: {$ref: "#/components/schemas/ActivationRequest"}}
-     */
     try {
       const { code } = req.body as { code: string };
       const user = await UserModel.findOneAndUpdate(
