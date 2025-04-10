@@ -8,6 +8,7 @@ import mediaController from "../controller/media.controller";
 import categoryController from "../controller/category.controller";
 import regionController from "../controller/region.controller";
 import eventController from "../controller/event.controller";
+import ticketController from "../controller/ticket.controller";
 
 const router = express.Router();
 
@@ -222,7 +223,7 @@ router.get(
   */
 );
 
-//event
+// event endpoint
 router.post(
   "/event",
   [authMiddleware, aclMiddleware([ROLES.ADMIN])],
@@ -294,5 +295,30 @@ router.get(
   #swagger.tags = ['Events']
   */
 );
+
+// ticket endpoint
+router.post(
+  "/tickets",
+  [authMiddleware, aclMiddleware([ROLES.ADMIN])],
+  ticketController.create
+);
+
+router.get("/tickets", ticketController.findAll);
+
+router.get("/tickets/:id", ticketController.findOne);
+
+router.put(
+  "/tickets/:id",
+  [authMiddleware, aclMiddleware([ROLES.ADMIN])],
+  ticketController.update
+);
+
+router.delete(
+  "/tickets/:id",
+  [authMiddleware, aclMiddleware([ROLES.ADMIN])],
+  ticketController.remove
+);
+
+router.get("/tickets/:eventId/events", ticketController.findAllByEvent);
 
 export default router;
