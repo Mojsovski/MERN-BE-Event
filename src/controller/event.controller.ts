@@ -19,26 +19,39 @@ export default {
 
   async findAll(req: IReqUser, res: Response) {
     try {
+      const buildQuery = (filter: any) => {
+        let query: FilterQuery<TEvent> = {};
+
+        if (filter.search) query.$text = { $search: filter.search };
+        if (filter.category) query.category = filter.category;
+        if (filter.isOnline) query.isOnline = filter.isOnline;
+        if (filter.isFeatured) query.isFeatured = filter.isFeatured;
+        if (filter.isPublish) query.isPublish = filter.isPublish;
+
+        return query;
+      };
+
       const {
-        page = 1,
         limit = 10,
+        page = 1,
         search,
-      } = req.query as unknown as IPaginatinationQuery;
+        category,
+        isOnline,
+        isFeatured,
+        isPublish,
+      } = req.query;
 
-      const query: FilterQuery<TEvent> = {};
-
-      if (search) {
-        Object.assign(query, {
-          ...query,
-          $text: {
-            $search: search,
-          },
-        });
-      }
+      const query = buildQuery({
+        search,
+        category,
+        isOnline,
+        isFeatured,
+        isPublish,
+      });
 
       const result = await EventModel.find(query)
-        .limit(limit)
-        .skip((page - 1) * limit)
+        .limit(+limit)
+        .skip((+page - 1) * +limit)
         .sort({ createdAt: -1 })
         .exec();
 
@@ -48,9 +61,9 @@ export default {
         res,
         result,
         {
+          current: +page,
           total: count,
-          totalPages: Math.ceil(count / limit),
-          current: page,
+          totalPages: Math.ceil(count / +limit),
         },
         "success find all event"
       );
