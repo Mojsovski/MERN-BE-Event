@@ -53,6 +53,7 @@ export default {
         .limit(+limit)
         .skip((+page - 1) * +limit)
         .sort({ createdAt: -1 })
+        .lean()
         .exec();
 
       const count = await EventModel.countDocuments(query);
@@ -80,7 +81,7 @@ export default {
       }
       const result = await EventModel.findById(id);
       if (!result) {
-        return response.notFound(res, "failed find one a event");
+        return response.notFound(res, "event not found");
       }
 
       response.success(res, result, "success find one a event");
