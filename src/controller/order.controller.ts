@@ -29,7 +29,8 @@ export default {
       }
 
       if (ticket.quantity < payload.quantity) {
-        return response.error(res, null, "ticket quantity is not enough");
+        response.error(res, null, "ticket quantity is not enough");
+        return;
       }
 
       const total: number = ticket?.price * payload.quantity;
@@ -101,29 +102,66 @@ export default {
     }
   },
 
-  //   async findAllByMember(req: IReqUser, res: Response) {
-  //     try {
-  //       response.success(res, result, "success create a order");
-  //     } catch (error) {
-  //       response.error(res, error, "failed create order");
-  //     }
-  //   },
+  async findAllByMember(req: IReqUser, res: Response) {
+    try {
+      const userId = req.user?.id;
 
-  // async update(req: IReqUser, res: Response) {
-  //   try {
-  //     response.success(res, result, "success create a order");
-  //   } catch (error) {
-  //     response.error(res, error, "failed create order");
-  //   }
-  // },
+      const buildQuery = (filter: any) => {
+        let query: FilterQuery<TOrder> = {
+          createdBy: userId,
+        };
 
-  // async remove(req: IReqUser, res: Response) {
-  //   try {
-  //     response.success(res, result, "success create a order");
-  //   } catch (error) {
-  //     response.error(res, error, "failed create order");
-  //   }
-  // },
+        if (filter.search) query.$text = { $search: filter.search };
+
+        return query;
+      };
+
+      const { limit = 10, page = 1, search } = req.query;
+
+      const query = buildQuery({
+        search,
+      });
+
+      const result = await OrderModel.find(query)
+        .limit(+limit)
+        .skip((+page - 1) * +limit)
+        .sort({ createdAt: -1 })
+        .lean()
+        .exec();
+
+      const count = await OrderModel.countDocuments(query);
+
+      response.pagination(
+        res,
+        result,
+        {
+          current: +page,
+          total: count,
+          totalPages: Math.ceil(count / +limit),
+        },
+        "success find all orders"
+      );
+    } catch (error) {
+      response.error(res, error, "failed find all orders");
+    }
+  },
+
+  async remove(req: IReqUser, res: Response) {
+    try {
+      const { orderId } = req.params;
+      const result = await OrderModel.findByIdAndDelete(
+        { orderId },
+        { new: true }
+      );
+
+      if (!result) {
+        response.notFound(res, "order not found");
+      }
+      response.success(res, result, "success to remove a order");
+    } catch (error) {
+      response.error(res, error, "failed to remove a order");
+    }
+  },
 
   async complete(req: IReqUser, res: Response) {
     try {
@@ -137,8 +175,10 @@ export default {
 
       if (!order) return response.notFound(res, "order not found");
 
-      if (order.status === OrderStatus.COMPLETED)
-        return response.error(res, null, "you have been completed this order");
+      if (order.status === OrderStatus.COMPLETED) {
+        response.error(res, null, "you have been completed this order");
+        return;
+      }
 
       const vouchers: TVoucher[] = Array.from(
         { length: order.quantity },
@@ -173,19 +213,77 @@ export default {
     }
   },
 
-  //   async pending(req: IReqUser, res: Response) {
-  //     try {
-  //       response.success(res, result, "success create a order");
-  //     } catch (error) {
-  //       response.error(res, error, "failed create order");
-  //     }
-  //   },
+  async pending(req: IReqUser, res: Response) {
+    try {
+      const { orderId } = req.params;
+      const userId = req.user?.id;
 
-  //   async cancelled(req: IReqUser, res: Response) {
-  //     try {
-  //       response.success(res, result, "success create a order");
-  //     } catch (error) {
-  //       response.error(res, error, "failed create order");
-  //     }
-  //   },
+      const order = await OrderModel.findOne({
+        orderId,
+        createdBy: userId,
+      });
+
+      if (!order) return response.notFound(res, "order not found");
+
+      if (order.status === OrderStatus.COMPLETED) {
+        response.error(res, null, "this order has been completed");
+        return;
+      }
+
+      if (order.status === OrderStatus.PENDING) {
+        response.error(res, null, "this order in payment pending");
+        return;
+      }
+      const result = await OrderModel.findByIdAndUpdate(
+        {
+          orderId,
+          createdBy: userId,
+        },
+        { status: OrderStatus.PENDING },
+        {
+          new: true,
+        }
+      );
+      response.success(res, result, "success to pending an order");
+    } catch (error) {
+      response.error(res, error, "failed to pending an order");
+    }
+  },
+
+  async cancelled(req: IReqUser, res: Response) {
+    try {
+      const { orderId } = req.params;
+      const userId = req.user?.id;
+
+      const order = await OrderModel.findOne({
+        orderId,
+        createdBy: userId,
+      });
+
+      if (!order) return response.notFound(res, "order not found");
+
+      if (order.status === OrderStatus.COMPLETED) {
+        response.error(res, null, "this order has been completed");
+        return;
+      }
+
+      if (order.status === OrderStatus.CANCELLED) {
+        response.error(res, null, "this order in payment cancelled");
+        return;
+      }
+      const result = await OrderModel.findByIdAndUpdate(
+        {
+          orderId,
+          createdBy: userId,
+        },
+        { status: OrderStatus.CANCELLED },
+        {
+          new: true,
+        }
+      );
+      response.success(res, result, "success to cancelled an order");
+    } catch (error) {
+      response.error(res, error, "failed to cancelled an order");
+    }
+  },
 };

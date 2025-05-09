@@ -10,6 +10,7 @@ import regionController from "../controller/region.controller";
 import eventController from "../controller/event.controller";
 import ticketController from "../controller/ticket.controller";
 import bannerController from "../controller/banner.controller";
+import orderController from "../controller/order.controller";
 
 const router = express.Router();
 
@@ -512,6 +513,49 @@ router.delete(
     "bearerAuth": {}
   }]
   */
+);
+
+// endpoint order
+router.post(
+  "/orders",
+  [authMiddleware, aclMiddleware([ROLES.MEMBER])],
+  orderController.create
+);
+
+router.get(
+  "/orders",
+  [authMiddleware, aclMiddleware([ROLES.ADMIN])],
+  orderController.findAll
+);
+
+router.get(
+  "/orders/:orderId",
+  [authMiddleware, aclMiddleware([ROLES.ADMIN, ROLES.MEMBER])],
+  orderController.findOne
+);
+
+router.put(
+  "/orders/:orderId/completed",
+  [authMiddleware, aclMiddleware([ROLES.MEMBER])],
+  orderController.complete
+);
+
+router.put(
+  "/orders/:orderId/pending",
+  [authMiddleware, aclMiddleware([ROLES.ADMIN])],
+  orderController.pending
+);
+
+router.put(
+  "/orders/:orderId/cancelled",
+  [authMiddleware, aclMiddleware([ROLES.ADMIN])],
+  orderController.cancelled
+);
+
+router.get(
+  "/orders-history",
+  [authMiddleware, aclMiddleware([ROLES.MEMBER])],
+  orderController.findAllByMember
 );
 
 export default router;
