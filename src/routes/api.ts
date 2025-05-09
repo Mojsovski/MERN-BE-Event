@@ -520,6 +520,19 @@ router.post(
   "/orders",
   [authMiddleware, aclMiddleware([ROLES.MEMBER])],
   orderController.create
+
+  /*
+  #swagger.tags = ['Order']
+  #swagger.security = [{
+    "bearerAuth": {}
+  }]
+  #swagger.requestBody = {
+    required: true,
+    schema: {
+      $ref: "#/components/schemas/CreateBannerRequest"
+    }
+  }
+  */
 );
 
 router.get(
