@@ -1,13 +1,13 @@
 import { Response } from "express";
 import { IPaginatinationQuery, IReqUser } from "../utils/interface";
 import response from "../utils/response";
-import TicketModel, { ticketDAO, TTicket } from "../models/ticket.model";
+import TicketModel, { ticketDTO, TTicket } from "../models/ticket.model";
 import { FilterQuery, isValidObjectId } from "mongoose";
 
 export default {
   async create(req: IReqUser, res: Response) {
     try {
-      await ticketDAO.validate(req.body);
+      await ticketDTO.validate(req.body);
       const result = await TicketModel.create(req.body);
 
       response.success(res, result, "success create a ticket");

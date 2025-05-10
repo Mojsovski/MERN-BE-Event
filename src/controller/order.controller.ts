@@ -1,7 +1,7 @@
 import { Response } from "express";
 import { IReqUser } from "../utils/interface";
 import OrderModel, {
-  orderDAO,
+  orderDTO,
   OrderStatus,
   TOrder,
   TVoucher,
@@ -20,7 +20,7 @@ export default {
         createdBy: userId,
       } as TOrder;
 
-      await orderDAO.validate(payload);
+      await orderDTO.validate(payload);
 
       const ticket = await TicketModel.findById(payload.ticket);
 
