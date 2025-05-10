@@ -41,20 +41,20 @@ export interface IOrder
   vouchers: TVoucher[];
 }
 
-const OrderSchema = new Schema(
+const OrderSchema = new Schema<IOrder>(
   {
     orderId: {
       type: Schema.Types.String,
     },
     createdBy: {
       type: Schema.Types.ObjectId,
-      required: true,
       ref: USER_MODEL_NAME,
+      required: true,
     },
     events: {
       type: Schema.Types.ObjectId,
-      required: true,
       ref: EVENT_MODEL_NAME,
+      required: true,
     },
     total: {
       type: Schema.Types.Number,
@@ -66,7 +66,10 @@ const OrderSchema = new Schema(
           type: Schema.Types.String,
           required: true,
         },
-        redirect_url: { type: Schema.Types.String, required: true },
+        redirect_url: {
+          type: Schema.Types.String,
+          required: true,
+        },
       },
     },
     status: {
@@ -76,23 +79,30 @@ const OrderSchema = new Schema(
     },
     ticket: {
       type: Schema.Types.ObjectId,
-      required: true,
       ref: TICKET_MODEL_NAME,
+      required: true,
     },
     quantity: {
       type: Schema.Types.Number,
       required: true,
     },
-    voucher: {
-      type: {
-        voucherId: {
-          type: Schema.Types.String,
+    vouchers: {
+      type: [
+        {
+          voucherId: {
+            type: Schema.Types.String,
+          },
+          isPrint: {
+            type: Schema.Types.Boolean,
+            default: false,
+          },
         },
-        isPrint: { type: Schema.Types.Boolean, default: false },
-      },
+      ],
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 ).index({ orderId: "text" });
 
 OrderSchema.pre("save", async function () {

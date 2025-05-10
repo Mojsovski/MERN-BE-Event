@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { IReqUser, IPaginatinationQuery } from "../utils/interface";
+import { IReqUser } from "../utils/interface";
 import OrderModel, {
   orderDAO,
   OrderStatus,
@@ -7,7 +7,7 @@ import OrderModel, {
   TVoucher,
 } from "../models/order.model";
 import response from "../utils/response";
-import { FilterQuery, isValidObjectId } from "mongoose";
+import { FilterQuery } from "mongoose";
 import TicketModel from "../models/ticket.model";
 import { getId } from "../utils/id";
 
@@ -149,17 +149,22 @@ export default {
   async remove(req: IReqUser, res: Response) {
     try {
       const { orderId } = req.params;
-      const result = await OrderModel.findByIdAndDelete(
-        { orderId },
-        { new: true }
+      const result = await OrderModel.findOneAndDelete(
+        {
+          orderId,
+        },
+        {
+          new: true,
+        }
       );
 
       if (!result) {
-        response.notFound(res, "order not found");
+        return response.notFound(res, "order not found");
       }
-      response.success(res, result, "success to remove a order");
+
+      response.success(res, result, "success to remove an order");
     } catch (error) {
-      response.error(res, error, "failed to remove a order");
+      response.error(res, error, "failed to remove an order");
     }
   },
 
@@ -173,7 +178,9 @@ export default {
         createdBy: userId,
       });
 
-      if (!order) return response.notFound(res, "order not found");
+      if (!order) {
+        return response.notFound(res, "order not found");
+      }
 
       if (order.status === OrderStatus.COMPLETED) {
         response.error(res, null, "you have been completed this order");
@@ -195,16 +202,25 @@ export default {
           orderId,
           createdBy: userId,
         },
-        { vouchers, status: OrderStatus.COMPLETED },
-        { new: true }
+        {
+          vouchers,
+          status: OrderStatus.COMPLETED,
+        },
+        {
+          new: true,
+        }
       );
 
       const ticket = await TicketModel.findById(order.ticket);
-      if (!ticket) return response.notFound(res, "order not found");
+      if (!ticket) return response.notFound(res, "ticket and order not found");
 
       await TicketModel.updateOne(
-        { _id: ticket._id },
-        { quantity: ticket.quantity - order.quantity }
+        {
+          _id: ticket._id,
+        },
+        {
+          quantity: ticket.quantity - order.quantity,
+        }
       );
 
       response.success(res, result, "success to complete an order");
@@ -216,11 +232,9 @@ export default {
   async pending(req: IReqUser, res: Response) {
     try {
       const { orderId } = req.params;
-      const userId = req.user?.id;
 
       const order = await OrderModel.findOne({
         orderId,
-        createdBy: userId,
       });
 
       if (!order) return response.notFound(res, "order not found");
@@ -231,19 +245,20 @@ export default {
       }
 
       if (order.status === OrderStatus.PENDING) {
-        response.error(res, null, "this order in payment pending");
+        response.error(res, null, "this order currently in payment pending");
         return;
       }
-      const result = await OrderModel.findByIdAndUpdate(
+
+      const result = await OrderModel.findOneAndUpdate(
+        { orderId },
         {
-          orderId,
-          createdBy: userId,
+          status: OrderStatus.PENDING,
         },
-        { status: OrderStatus.PENDING },
         {
           new: true,
         }
       );
+
       response.success(res, result, "success to pending an order");
     } catch (error) {
       response.error(res, error, "failed to pending an order");
@@ -253,14 +268,14 @@ export default {
   async cancelled(req: IReqUser, res: Response) {
     try {
       const { orderId } = req.params;
-      const userId = req.user?.id;
 
       const order = await OrderModel.findOne({
         orderId,
-        createdBy: userId,
       });
 
-      if (!order) return response.notFound(res, "order not found");
+      if (!order) {
+        return response.notFound(res, "order not found");
+      }
 
       if (order.status === OrderStatus.COMPLETED) {
         response.error(res, null, "this order has been completed");
@@ -268,19 +283,20 @@ export default {
       }
 
       if (order.status === OrderStatus.CANCELLED) {
-        response.error(res, null, "this order in payment cancelled");
+        response.error(res, null, "this order currently in payment cancelled");
         return;
       }
-      const result = await OrderModel.findByIdAndUpdate(
+
+      const result = await OrderModel.findOneAndUpdate(
+        { orderId },
         {
-          orderId,
-          createdBy: userId,
+          status: OrderStatus.CANCELLED,
         },
-        { status: OrderStatus.CANCELLED },
         {
           new: true,
         }
       );
+
       response.success(res, result, "success to cancelled an order");
     } catch (error) {
       response.error(res, error, "failed to cancelled an order");
