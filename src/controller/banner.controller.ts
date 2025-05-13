@@ -3,6 +3,7 @@ import { IPaginatinationQuery, IReqUser } from "../utils/interface";
 import BannerModel, { bannerDTO, TBanner } from "../models/banner.model";
 import response from "../utils/response";
 import { FilterQuery, isValidObjectId } from "mongoose";
+import uploader from "../utils/uploader";
 
 export default {
   async create(req: IReqUser, res: Response) {
@@ -103,6 +104,13 @@ export default {
       const result = await BannerModel.findByIdAndDelete(id, {
         new: true,
       });
+
+      if (!result) {
+        return response.notFound(res, "event not found");
+      }
+
+      // delete media (claudinary)
+      await uploader.remove(result.image);
 
       response.success(res, result, "success remove a banner");
     } catch (error) {

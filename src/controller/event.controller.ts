@@ -3,6 +3,7 @@ import { IReqUser, IPaginatinationQuery } from "../utils/interface";
 import EventModel, { eventDTO, TEvent } from "../models/event.model";
 import response from "../utils/response";
 import { FilterQuery, isValidObjectId } from "mongoose";
+import uploader from "../utils/uploader";
 
 export default {
   async create(req: IReqUser, res: Response) {
@@ -101,6 +102,10 @@ export default {
         new: true,
       });
 
+      if (!result) {
+        return response.notFound(res, "event not found");
+      }
+
       response.success(res, result, "success update an event");
     } catch (error) {
       response.error(res, error, "failed update an event");
@@ -118,6 +123,13 @@ export default {
         new: true,
       });
 
+      if (!result) {
+        return response.notFound(res, "event not found");
+      }
+
+      // delete media (claudinary)
+      await uploader.remove(result.banner);
+
       response.success(res, result, "success remove an event");
     } catch (error) {
       response.error(res, error, "failed remove an event");
@@ -128,6 +140,10 @@ export default {
     try {
       const { slug } = req.params;
       const result = await EventModel.findOne({ slug });
+
+      if (!result) {
+        return response.notFound(res, "event not found");
+      }
 
       response.success(res, result, "success fine one by slug an event");
     } catch (error) {

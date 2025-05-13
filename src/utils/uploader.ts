@@ -46,6 +46,7 @@ export default {
     const result = await Promise.all(uploadBatch);
     return result;
   },
+
   async remove(fileUrl: string) {
     const publicId = getPublicIdFromFileUrl(fileUrl);
     const result = await cloudinary.uploader.destroy(publicId);
