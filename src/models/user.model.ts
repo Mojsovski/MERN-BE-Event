@@ -3,19 +3,63 @@ import { encrypt } from "../utils/encryption";
 import { renderMailHtml, sendMail } from "../utils/mail/mail";
 import { CLIENT_HOST, EMAIL_SMTP_USER } from "../utils/env";
 import { ROLES } from "../utils/constant";
+import * as Yup from "yup";
+
+const validatePassword = Yup.string()
+  .required()
+  .min(6, "Password harus minimal 6 karakter")
+  .test(
+    "minimal-terdapat-satu-huruf-besar",
+    "Password minimal terdapat 1 huruf besar",
+    (value) => {
+      if (!value) return false;
+      const regex = /^(?=.*[A-Z])/;
+      return regex.test(value);
+    }
+  )
+  .test(
+    "minimal-terdapat-satu-angka",
+    "Password minimal terdapat angka",
+    (value) => {
+      if (!value) return false;
+      const regex = /^(?=.*\d)/;
+      return regex.test(value);
+    }
+  );
+
+const validateConfirmPassword = Yup.string()
+  .required()
+  .oneOf([Yup.ref("password"), ""], "Password tidak sama");
+
+export const userLoginDTO = Yup.object({
+  identifier: Yup.string().required(),
+  password: validatePassword,
+});
+
+export const userUpdatePasswordDTO = Yup.object({
+  oldPassword: validatePassword,
+  password: validatePassword,
+  confirmPassword: validateConfirmPassword,
+});
 
 export const USER_MODEL_NAME = "User";
 
-export interface User {
-  fullName: string;
-  userName: string;
-  email: string;
-  password: string;
-  role: string;
-  profilePicture: string;
+export const userDTO = Yup.object({
+  fullName: Yup.string().required(),
+  userName: Yup.string().required(),
+  email: Yup.string().email().required(),
+  password: validatePassword,
+  confirmPassword: validateConfirmPassword,
+});
+
+export type TUser = Yup.InferType<typeof userDTO>;
+
+export interface User extends Omit<TUser, "confirmPassword"> {
   isActive: boolean;
   activationCode: string;
   createdAt?: string;
+  role: string;
+  profilePicture: string;
 }
 
 const Schema = mongoose.Schema;

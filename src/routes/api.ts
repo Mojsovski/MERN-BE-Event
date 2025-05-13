@@ -33,24 +33,11 @@ router.post(
   authController.login
 
   /*
-      #swagger.tags = ['Auth']
+     #swagger.tags = ['Auth']
      #swagger.requestBody = {
      required: true,
-     schema: {$ref: "#/components/schemas/loginRequest"}}
+     schema: {$ref: "#/components/schemas/LoginRequest"}}
      */
-);
-
-router.get(
-  "/auth/me",
-  authMiddleware,
-  authController.me
-
-  /*
-     #swagger.tags = ['Auth']
-    #swagger.security = [{
-    "bearerAuth": []
-    }]
- */
 );
 
 router.post(
@@ -63,6 +50,58 @@ router.post(
      required: true,
      schema: {$ref: "#/components/schemas/ActivationRequest"}}
      */
+);
+
+router.get(
+  "/auth/me",
+  authMiddleware,
+  authController.me
+
+  /*
+    #swagger.tags = ['Auth']
+    #swagger.security = [{
+    "bearerAuth": []
+    }]
+    #swagger.requestBody = {
+      required: true,
+      schema: {
+         $ref: "#/components/schemas/ActivationRequest"}
+       }
+ */
+);
+
+router.put(
+  "/auth/update-profile",
+  [authMiddleware, aclMiddleware([ROLES.MEMBER])],
+  authController.updateProfile
+  /*
+  #swagger.tags = ['Auth']
+  #swagger.security = [{
+    "bearerAuth": {}
+  }]
+  #swagger.requestBody = {
+     required: true,
+     schema: {
+        $ref: "#/components/schemas/UpdateProfileRequest"}
+     }
+  */
+);
+
+router.put(
+  "/auth/update-password",
+  [authMiddleware, aclMiddleware([ROLES.MEMBER])],
+  authController.updatePassword
+  /*
+  #swagger.tags = ['Auth']
+  #swagger.security = [{
+    "bearerAuth": {}
+  }]
+  #swagger.requestBody = {
+     required: true,
+     schema: {
+        $ref: "#/components/schemas/UpdatePasswordRequest"}
+     }
+  */
 );
 
 // media route

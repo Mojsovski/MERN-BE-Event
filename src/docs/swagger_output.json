@@ -60,34 +60,16 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/loginRequest"
+                "$ref": "#/components/schemas/LoginRequest"
               }
             },
             "application/xml": {
               "schema": {
-                "$ref": "#/components/schemas/loginRequest"
+                "$ref": "#/components/schemas/LoginRequest"
               }
             }
           }
         }
-      }
-    },
-    "/auth/me": {
-      "get": {
-        "tags": [
-          "Auth"
-        ],
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
       }
     },
     "/auth/activation": {
@@ -112,6 +94,105 @@
             "application/xml": {
               "schema": {
                 "$ref": "#/components/schemas/ActivationRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/me": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ActivationRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/ActivationRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/update-profile": {
+      "put": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": {}
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProfileRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProfileRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/update-password": {
+      "put": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": {}
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePasswordRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePasswordRequest"
               }
             }
           }
@@ -1313,7 +1394,7 @@
       }
     },
     "schemas": {
-      "loginRequest": {
+      "LoginRequest": {
         "type": "object",
         "properties": {
           "identifier": {
@@ -1326,7 +1407,7 @@
           }
         },
         "xml": {
-          "name": "loginRequest"
+          "name": "LoginRequest"
         }
       },
       "RegisterRequest": {
@@ -1334,7 +1415,7 @@
         "properties": {
           "fullName": {
             "type": "string",
-            "example": "fullname"
+            "example": "full name"
           },
           "userName": {
             "type": "string",
@@ -1367,6 +1448,42 @@
         },
         "xml": {
           "name": "ActivationRequest"
+        }
+      },
+      "UpdateProfileRequest": {
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "type": "string",
+            "example": " full name user"
+          },
+          "profilePicture": {
+            "type": "string",
+            "example": "url image"
+          }
+        },
+        "xml": {
+          "name": "UpdateProfileRequest"
+        }
+      },
+      "UpdatePasswordRequest": {
+        "type": "object",
+        "properties": {
+          "oldPassword": {
+            "type": "string",
+            "example": ""
+          },
+          "password": {
+            "type": "string",
+            "example": ""
+          },
+          "confirmPassword": {
+            "type": "string",
+            "example": ""
+          }
+        },
+        "xml": {
+          "name": "UpdatePasswordRequest"
         }
       },
       "RemoveMediaRequest": {

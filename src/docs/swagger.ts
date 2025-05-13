@@ -24,12 +24,12 @@ const doc = {
       },
     },
     schemas: {
-      loginRequest: {
+      LoginRequest: {
         identifier: "email or username",
         password: "password",
       },
       RegisterRequest: {
-        fullName: "fullname",
+        fullName: "full name",
         userName: "username",
         email: "email",
         password: "password",
@@ -37,6 +37,15 @@ const doc = {
       },
       ActivationRequest: {
         code: "from email",
+      },
+      UpdateProfileRequest: {
+        fullName: " full name user",
+        profilePicture: "url image",
+      },
+      UpdatePasswordRequest: {
+        oldPassword: "",
+        password: "",
+        confirmPassword: "",
       },
       RemoveMediaRequest: {
         fileUrl: "",
